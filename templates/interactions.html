@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Interactions</h1>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-3">
+    <select class="form-select" name="application_id" required>
+      {% for app in applications %}
+      <option value="{{ app.id }}">{{ app.company }} - {{ app.role }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="recruiter_id">
+      <option value="">No recruiter selected</option>
+      {% for recruiter in recruiters %}
+      <option value="{{ recruiter.id }}">{{ recruiter.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2"><input class="form-control" name="interaction_type" placeholder="Email/Call/LinkedIn" required></div>
+  <div class="col-md-2"><input class="form-control" name="happened_at" type="datetime-local"></div>
+  <div class="col-md-2"><input class="form-control" name="notes" placeholder="Notes"></div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">Add</button></div>
+</form>
+
+<table class="table table-striped">
+  <thead><tr><th>Date</th><th>Type</th><th>Application ID</th><th>Recruiter ID</th><th>Notes</th></tr></thead>
+  <tbody>
+  {% for interaction in interactions %}
+    <tr>
+      <td>{{ interaction.happened_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>{{ interaction.interaction_type }}</td>
+      <td>{{ interaction.application_id }}</td>
+      <td>{{ interaction.recruiter_id or '-' }}</td>
+      <td>{{ interaction.notes or '-' }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

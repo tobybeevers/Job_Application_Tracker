@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Applications</h1>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-3"><input required class="form-control" name="company" placeholder="Company"></div>
+  <div class="col-md-3"><input required class="form-control" name="role" placeholder="Role"></div>
+  <div class="col-md-2">
+    <select class="form-select" name="status">
+      <option>Applied</option><option>Interview</option><option>Offer</option><option>Rejected</option><option>Ghosted</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="recruiter_id">
+      <option value="">No recruiter selected</option>
+      {% for recruiter in recruiters %}
+      <option value="{{ recruiter.id }}">{{ recruiter.name }} - {{ recruiter.company }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">Add</button></div>
+</form>
+
+<table class="table table-striped">
+  <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Recruiter ID</th><th>Date</th></tr></thead>
+  <tbody>
+  {% for app in applications %}
+    <tr>
+      <td>{{ app.company }}</td><td>{{ app.role }}</td><td>{{ app.status }}</td><td>{{ app.recruiter_id or '-' }}</td><td>{{ app.created_at.strftime('%Y-%m-%d') }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
