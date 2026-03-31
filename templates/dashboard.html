@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Recruiter Performance Dashboard</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card p-3">Applications: <strong>{{ total_applications }}</strong></div></div>
+  <div class="col-md-4"><div class="card p-3">Recruiters: <strong>{{ total_recruiters }}</strong></div></div>
+  <div class="col-md-4"><div class="card p-3">Interactions: <strong>{{ total_interactions }}</strong></div></div>
+</div>
+
+<div class="card mb-4 p-3">
+  <h3>Pipeline Status</h3>
+  <canvas id="statusChart"></canvas>
+</div>
+
+<div class="card p-3">
+  <h3>Recruiter Benchmark Leaderboard</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr><th>Recruiter</th><th>Company</th><th>Apps</th><th>Interviews</th><th>Offers</th><th>Ghosted</th><th>Score</th></tr>
+    </thead>
+    <tbody>
+      {% for row in leaderboard %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.company }}</td>
+        <td>{{ row.applications }}</td>
+        <td>{{ row.interviews }}</td>
+        <td>{{ row.offers }}</td>
+        <td>{{ row.ghosted }}</td>
+        <td><strong>{{ row.score }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const statusData = {{ status_counts | tojson }};
+new Chart(document.getElementById('statusChart'), {
+  type: 'bar',
+  data: {
+    labels: statusData.map(x => x[0]),
+    datasets: [{
+      label: 'Applications',
+      data: statusData.map(x => x[1]),
+      backgroundColor: '#0d6efd'
+    }]
+  }
+});
+</script>
+{% endblock %}
